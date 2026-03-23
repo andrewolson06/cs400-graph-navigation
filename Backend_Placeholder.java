@@ -25,7 +25,7 @@ public class Backend_Placeholder implements BackendInterface {
     public void loadGraphData(String filename) throws IOException {
         graph.insertNode("Alpha_Centauri_A");
     }
-    
+
     public List<String> getListOfAll() {
         return nodes;
     }

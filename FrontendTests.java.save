@@ -1,0 +1,46 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
+public class FrontendTests(){
+
+	@Test
+	public roleTest1(){
+		new 
+		new Backend_Placeholder backend = Backend_Placeholder(graph);
+		
+
+
+	}
+
+
+	@Test
+	public roleTest2(){
+
+
+
+
+	}
+
+	@Test
+	public roleTest3(){
+
+
+
+
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+}

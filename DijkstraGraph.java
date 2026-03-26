@@ -1,6 +1,7 @@
 import java.util.PriorityQueue;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 /**
@@ -112,7 +113,36 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * @throws NullPointerException if the start or end node are null
      */
     public List<NodeType> shortestPathData(NodeType start, NodeType end) {
-        return null;
+	//null check
+        if (start == null || end == null) {
+	    throw new NullPointerException("Nodes cannot be null");
+	}
+
+	//create start and end nodes
+	Node startNode = nodes.get(start);
+	Node endNode = nodes.get(end);
+
+	//get shortest path and store in result node
+	SearchNode result = computeShortestPath(startNode, endNode);
+
+	//null check
+	if (result == null) {
+	    throw new NoSuchElementException("No such path exists");
+	}
+
+	//create list variable
+	ArrayList<NodeType> path = new ArrayList<>();
+
+	//put the path into the list variable created above.
+	//all of data from nodes in the path should be in list
+	SearchNode current = result;
+	while (current != null) {
+	    path.add(0, current.node.data);
+	    current = current.pred;
+	}
+
+	//return the list of all the data on the path
+	return path;
     }
 
     /**
@@ -129,7 +159,25 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * @throws NullPointerException if the start or end node are null
      */
     public double shortestPathCost(NodeType start, NodeType end) {
-        return Double.NaN;
+        //null check
+	if (start == null || end == null) {
+            throw new NullPointerException("Nodes cannot be null");
+        }
+
+	// create start and end nodes
+	Node startNode = nodes.get(start);
+        Node endNode = nodes.get(end);
+
+	//get shortest path and store in result node
+	SearchNode result = computeShortestPath(startNode, endNode);
+
+	//null check
+	if (result == null) {
+            throw new NoSuchElementException("No such path exists");
+        }
+
+	//return the cost of the entire path
+	return result.cost;
     }
 
 }

@@ -3,6 +3,9 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * This class extends the BaseGraph data structure with additional methods for
@@ -94,7 +97,55 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
      * @throws NullPointerException if the start or end node are null
      */
     protected SearchNode computeShortestPath(Node start, Node end) {
-        return null;
+	//null check
+        if (start == null || end == null) {
+	    throw new NullPointerException("Start and end nodes can't be null.");
+	}
+
+	//create priority queue and required objects
+	PriorityQueue<SearchNode> queue = new PriorityQueue<>();
+	PlaceholderMap<Node, Node> visited = new PlaceholderMap<>();
+
+	//create new node and add it to queue
+	SearchNode startNode = new SearchNode(start);
+	queue.add(startNode);
+
+	//follow dijkstra's function and process through the graph
+	while (!queue.isEmpty()) {
+	    SearchNode current = queue.poll();
+	    Node currentNode = current.node;
+
+	    //check if end of queue
+	    if (currentNode.equals(end)) {
+		return current;
+	    }
+
+	    //check whether node has been visited
+	    if (visited.containsKey(currentNode)) {
+		continue;
+	    }
+
+	    //mark as visited
+	    visited.put(currentNode, currentNode);
+
+	    // process each edge that is from the node
+	    for (Edge edge : currentNode.edgesLeaving) {
+		Node neighbor = edge.succ;
+
+		//check whether neighbor has been visited
+		if (visited.containsKey(neighbor)) {
+		    continue;
+		}
+
+		//create and add neightbor to the queue
+		SearchNode neighborNode = new SearchNode(current, edge);
+		queue.add(neighborNode);
+	    }
+
+	}
+
+	//loop was exited and no path was found
+	throw new NoSuchElementException("No path exists from start to end nodes");
     }
 
     /**
@@ -179,5 +230,164 @@ public class DijkstraGraph<NodeType, EdgeType extends Number>
 	//return the cost of the entire path
 	return result.cost;
     }
+
+    /**
+     * This first test case tests a lecture example that we did in class.
+     * This example creates a directed, weighted graph between 8 nodes.
+     * This method tests finding the shortestPath between the futherest nodes apart.
+     * The order of the nodes visited along with the cost are tested specifically.
+     */
+    @Test
+    public void testShortestPathLectureExample() {
+	//create graph
+	DijkstraGraph<String, Integer> graph = new DijkstraGraph<>();
+
+	//insert nodes
+	String[] nodes = {"A","B","C","D","E","F","G","H"};
+	for (String node : nodes) {
+	    graph.insertNode(node);
+	}
+
+	//insert edges and their costs
+	graph.insertEdge("A","B",4);
+	graph.insertEdge("A","C",2);
+	graph.insertEdge("C","D",5);
+	graph.insertEdge("B","D",1);
+	graph.insertEdge("B","E",10);
+	graph.insertEdge("D","F",0);
+	graph.insertEdge("F","D",2);
+	graph.insertEdge("F","H",4);
+	graph.insertEdge("G","H",4);
+	graph.insertEdge("D","E",3);
+
+	//get shortest path
+	List<String> path = graph.shortestPathData("A","H");
+	double cost = graph.shortestPathCost("A","H");
+
+	//test how many nodes are in path and order they are visited. 
+	//test the cost
+	Assertions.assertEquals(5, path.size());
+	Assertions.assertEquals("A", path.get(0));
+        Assertions.assertEquals("B", path.get(1));
+        Assertions.assertEquals("D", path.get(2));
+        Assertions.assertEquals("F", path.get(3));
+        Assertions.assertEquals("H", path.get(4));
+        Assertions.assertEquals(9.0, cost);
+    }
+
+    /**
+     * This test method follows the same structure as the first test method
+     * as the graphs are the exact same. However in this case, a dfferent 
+     * start and end node are chosen so that the path between the two is different
+     * than the first case and the cost on the path is also different.
+     */
+    @Test
+    public void testDiffStartAndEnd() {
+	//create graph
+	DijkstraGraph<String, Integer> graph = new DijkstraGraph<>();
+
+	//insert nodes
+        String[] nodes = {"A","B","C","D","E","F","G","H"};
+        for (String node : nodes) {
+            graph.insertNode(node);
+        }
+
+	//insert edges and their cost
+        graph.insertEdge("A","B",4);
+        graph.insertEdge("A","C",2);
+        graph.insertEdge("C","D",5);
+        graph.insertEdge("B","D",1);
+        graph.insertEdge("B","E",10);
+        graph.insertEdge("D","F",0);
+        graph.insertEdge("F","D",2);
+        graph.insertEdge("F","H",4);
+        graph.insertEdge("G","H",4);
+        graph.insertEdge("D","E",3);
+
+        //get shortest path from C to E
+        List<String> path = graph.shortestPathData("C","E");
+        double cost = graph.shortestPathCost("C","E");
+
+	//test how many nodes are in path and order they are visited.
+        //test the cost
+	Assertions.assertEquals(3, path.size());
+        Assertions.assertEquals("C", path.get(0));
+        Assertions.assertEquals("D", path.get(1));
+        Assertions.assertEquals("E", path.get(2));
+        Assertions.assertEquals(8.0, cost);
+     }
+
+    /**
+     * This third and final test method tests the final two requirements of the 
+     * testing assignment which is to test when the start and end node do not exist,
+     * and if a path between two nodes do not exist. For each of these requirements,
+     * I test all of the cases. For example when both of the nodes do not exist vs.
+     * when only one of the nodes exist. I test the functionality of exceptions being
+     * thrown when this is the case.
+     */
+     @Test
+     public void testIncorrectPaths() {
+	//create graph
+	DijkstraGraph<String, Integer> graph = new DijkstraGraph<>();
+
+	//insert nodes
+        String[] nodes = {"A","B","C","D","E","F","G","H"};
+        for (String node : nodes) {
+            graph.insertNode(node);
+        }
+
+	//insert edges and their cost
+	graph.insertEdge("A","B",4);
+        graph.insertEdge("A","C",2);
+        graph.insertEdge("C","D",5);
+        graph.insertEdge("B","D",1);
+        graph.insertEdge("B","E",10);
+        graph.insertEdge("D","F",0);
+        graph.insertEdge("F","D",2);
+        graph.insertEdge("F","H",4);
+        graph.insertEdge("G","H",4);
+        graph.insertEdge("D","E",3);
+
+	//test if exceptions are thrown for when path does not exist
+	//Case 1: G has no incoming edges
+	try {
+	    graph.shortestPathData("F","G");
+	    Assertions.fail("Path does not exist");
+	} catch (NoSuchElementException e) {
+	    //success
+	}
+	//Case 2: E has no outgoing edges
+        try {
+            graph.shortestPathData("E","F");
+            Assertions.fail("Path does not exist");
+        } catch (NoSuchElementException e) {
+            //success
+        }
+
+	//test if exceptions are thrown for when a start and end node do not exist
+	//Case 1: start and end do not exist
+	try {
+            graph.shortestPathData("X","Y");
+            Assertions.fail("Path does not exist");
+        } catch (NoSuchElementException e) {
+            //success
+        }
+	//Case 2: start node does not exist
+        try {
+            graph.shortestPathData("T","H");
+            Assertions.fail("Path does not exist");
+        } catch (NoSuchElementException e) {
+            //success
+        }
+	//Case 3: end node does not exist
+        try {
+            graph.shortestPathData("A","Z");
+            Assertions.fail("Path does not exist");
+        } catch (NoSuchElementException e) {
+            //success
+        }
+
+     }
+
 
 }

@@ -154,8 +154,7 @@ public class WebApp {
 				keyValuePairs.get("start"),
 				keyValuePairs.get("end")) + "</div>";
 		} else if(keyValuePairs.containsKey("from")) {
-			response += frontend.generateFurthestLocationFromResponseHTML(
-				keyValuePairs.get("from")) + "</div>";
+			response += frontend.generateFurthestLocationListFromResponseHTML(keyValuePairs.get("from")) + "</div>";
 		} else
 			// otherwise, leave response div blank
 			response += "</div>";
@@ -174,7 +173,7 @@ public class WebApp {
 			frontend.generateShortestPathPromptHTML() +
 			"</div>";
 		String secondPrompt = "<div id=\"secondPrompt\">" +
-			frontend.generateFurthestLocationFromPromptHTML() +
+			frontend.generateFurthestLocationListFromPromptHTML() +
 			"</div>";
 		return firstPrompt + secondPrompt;
     }

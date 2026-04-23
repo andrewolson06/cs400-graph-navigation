@@ -61,8 +61,17 @@ public class Backend implements BackendInterface {
 		    String from = parts[0].trim().replace("\"", "");
 
 		    String right = parts[1].trim();
-		    String to = right.substring(0, right.indexOf("[")).trim().replace("\"", "");
-		    String weightStr = right.substring(right.indexOf("minutes=") + 8, right.indexOf("]"));
+
+		    int bracketIndex = right.indexOf("[");
+		    int minutesIndex = right.indexOf("minutes=");
+		    int endBracketIndex = right.indexOf("]");
+
+		    if (bracketIndex == -1 || minutesIndex == -1 || endBracketIndex == -1) {
+			continue;
+		    }
+
+		    String to = right.substring(0, bracketIndex).trim().replace("\"", "");
+		    String weightStr = right.substring(minutesIndex + 8, endBracketIndex);
 
 		    double weight = Double.parseDouble(weightStr);
 

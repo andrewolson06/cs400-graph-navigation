@@ -1,11 +1,11 @@
 import java.util.List;
 
 
+
+
 public class Frontend implements FrontendInterface{
 
-
 private BackendInterface backend;
-
 
 public Frontend(BackendInterface backend) {
         this.backend = backend;
@@ -65,10 +65,7 @@ public Frontend(BackendInterface backend) {
 
 		List<Double> times = backend.findTimesOnShortestPath(start, end);
 
-		return "<p>Shortest path from " + start + " to " + end + ":</p>\n" +
-			"<ol>\n" +
-			locations +
-			"</ol>\n" +
+		return "<p>Shortest path from " + start + " to " + end + ":</p>\n" + "<ol>\n" + locations + "</ol>\n" +
 			"<p>Total time: " +  times.get(times.size()-1) + " minutes</p>";
 
 	}
@@ -107,7 +104,7 @@ public Frontend(BackendInterface backend) {
      public String generateFurthestLocationListFromResponseHTML(String start){
 	try{
 		List<String> furthestLocations = backend.getFurthestFromList(start);
-		
+
 		String furthestLocation = furthestLocations.get(furthestLocations.size()-1);
 
 		List<String> shortestPath = backend.findLocationsOnShortestPath(start, furthestLocation);
@@ -121,11 +118,8 @@ public Frontend(BackendInterface backend) {
                          locations.append("<li>").append(a).append("</li>\n");
                  }
 
-                 return "<p>Shortest path from " + start + " to " + furthestLocation + ":</p>\n" +
-                         "<ol>\n" +
-                         locations +
-                         "</ol>\n" +
-                         "<p>Number of Locations: " +  shortestPath.size();
+                 return "<p>Shortest path from " + start + " to " + furthestLocation + ":</p>\n" + "<ol>\n" + locations + "</ol>\n" + "<p>Number of Locations: " +
+			shortestPath.size();
 
 
 

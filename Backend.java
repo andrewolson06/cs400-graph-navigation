@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Iterator;
 
 /**
  * This backend class is responsible for taking data from files, extracting locations, finding
@@ -43,10 +44,12 @@ public class Backend implements BackendInterface {
      */
     @Override
     public void loadGraphData(String filename) throws IOException {
-	for (String node : new ArrayList<>(nodes)) {
+	Iterator<String> it = nodes.iterator();
+	while (it.hasNext()) {
+	    String node = it.next();
 	    graph.removeNode(node);
+	    it.remove();
 	}
-	nodes.clear();
 
 	try (Scanner scanner = new Scanner(new File(filename))) {
 

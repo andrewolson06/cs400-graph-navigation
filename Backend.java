@@ -10,6 +10,7 @@
 // Credits:          No help given or received.
 //////////////////////////// 80 columns wide //////////////////////////////////
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -92,6 +93,8 @@ public class Backend implements BackendInterface {
 
 	        }
 	    }
+	} catch (FileNotFoundException e) {
+	    throw new IOException("File could not be opened");
 	}
     }
 

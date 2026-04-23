@@ -62,6 +62,9 @@ public class Backend implements BackendInterface {
 		    continue;
 	        }
 
+		if (!line.contains("->") || !line.contains("[") || !line.contains("minutes=") || !line.contains("]")) {
+		    continue;
+		}
 	        if (line.contains("->")) {
 		    String[] parts = line.split("->");
 		    String from = parts[0].trim().replace("\"", "");

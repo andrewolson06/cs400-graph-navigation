@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Iterator;
@@ -36,7 +36,7 @@ public class Backend implements BackendInterface {
      */
     public Backend(GraphADT<String, Double> graph) {
 	this.graph = graph;
-	this.nodes = new HashSet<>();
+	this.nodes = new LinkedHashSet<>();
     }
 
     /**

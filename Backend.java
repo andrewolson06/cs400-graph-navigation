@@ -42,6 +42,8 @@ public class Backend implements BackendInterface {
     /**
      * This method is responsible for loading the data from files. It takes these files and correctly
      * seperates the locations by syntax.
+     * @param filename the name of the file
+     * @throws IOException
      */
     @Override
     public void loadGraphData(String filename) throws IOException {
@@ -110,6 +112,8 @@ public class Backend implements BackendInterface {
     /**
      * This method gets all of the locations on the shortest path between two locations.
      * The locations that are on this path are then put onto an array.
+     * @param start start location
+     * @param end end location
      * @return ArrayList this is the array with all the locations on the shortest path
      */
     @Override
@@ -124,6 +128,8 @@ public class Backend implements BackendInterface {
     /**
      * This method gets all of the times between the locations that are on the shortest
      * path between two locations. The times are then placed within an array of doubles.
+     * @param start start location
+     * @param end end location
      * @return ArrayList this is the array with all the times from location to location
      */
     @Override
@@ -146,6 +152,8 @@ public class Backend implements BackendInterface {
     /**
      * This method gets the location that is farthest from a specified location. It is then
      * returned in a List.
+     * @param start start location
+     * @throws NoSuchElementException
      * @return List this is the location that is the farthest from a certain start
      * 			location.
      */

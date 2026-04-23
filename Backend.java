@@ -48,40 +48,39 @@ public class Backend implements BackendInterface {
 	}
 	nodes.clear();
 
-	Scanner scanner = new Scanner(new File(filename));
+	try (Scanner scanner = new Scanner(new File(filename))) {
 
-	while(scanner.hasNextLine()) {
-	    String line = scanner.nextLine().trim();
-	    if (line.isEmpty() || line.startsWith("digraph") || line.equals("{") || line.equals("}")) {
-		continue;
-	    }
+	    while(scanner.hasNextLine()) {
+	        String line = scanner.nextLine().trim();
+	        if (line.isEmpty() || line.startsWith("digraph") || line.equals("{") || line.equals("}")) {
+		    continue;
+	        }
 
-	    if (line.contains("->")) {
-		String[] parts = line.split("->");
-		String from = parts[0].trim().replace("\"", "");
+	        if (line.contains("->")) {
+		    String[] parts = line.split("->");
+		    String from = parts[0].trim().replace("\"", "");
 
-		String right = parts[1].trim();
-		String to = right.substring(0, right.indexOf("[")).trim().replace("\"", "");
-		String weightStr = right.substring(right.indexOf("minutes=") + 8, right.indexOf("]"));
+		    String right = parts[1].trim();
+		    String to = right.substring(0, right.indexOf("[")).trim().replace("\"", "");
+		    String weightStr = right.substring(right.indexOf("minutes=") + 8, right.indexOf("]"));
 
-		double weight = Double.parseDouble(weightStr);
+		    double weight = Double.parseDouble(weightStr);
 
-		if (!nodes.contains(from)) {
-		    graph.insertNode(from);
-		    nodes.add(from);
-		}
+		    if (!nodes.contains(from)) {
+		        graph.insertNode(from);
+		        nodes.add(from);
+		    }
 
-		if (!nodes.contains(to)) {
-		    graph.insertNode(to);
-		    nodes.add(to);
-		}
+		    if (!nodes.contains(to)) {
+		        graph.insertNode(to);
+		        nodes.add(to);
+		    }
 
-		graph.insertEdge(from, to, weight);
+		    graph.insertEdge(from, to, weight);
 
+	        }
 	    }
 	}
-
-	scanner.close();
     }
 
     /**

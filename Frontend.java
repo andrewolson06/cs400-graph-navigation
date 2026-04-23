@@ -110,10 +110,11 @@ public Frontend(BackendInterface backend) {
 		List<String> shortestPath = backend.findLocationsOnShortestPath(start, furthestLocation);
 
 		 if (shortestPath == null || shortestPath.size() <= 0){
-                         return "<p>No path exists between these two locations.</p>";
+                         return "<p>No path exists between these two locations.</p>"; //checks for non existing paths
                  }
 
                  StringBuilder locations = new StringBuilder();
+
                  for (String a : shortestPath) {
                          locations.append("<li>").append(a).append("</li>\n");
                  }
@@ -124,7 +125,7 @@ public Frontend(BackendInterface backend) {
 
 
 		}catch (Exception e){
-			return "<p>" + e.getMessage() + "</p>";
+			return "<p>" + e.getMessage() + "</p>"; //catches other errors such as "invalid input", the exceptions should percolate from the backend methods.
 		}
 
 	}

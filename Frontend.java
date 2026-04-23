@@ -105,22 +105,36 @@ public Frontend(BackendInterface backend) {
 	try{
 		List<String> furthestLocations = backend.getFurthestFromList(start);
 
-		String furthestLocation = furthestLocations.get(furthestLocations.size()-1);
+		if (shortestPath == null || furthestLocation.isEmpty()){
+                         return "<p>No locations found</p>"; //checks if paths exist
+                }
 
-		List<String> shortestPath = backend.findLocationsOnShortestPath(start, furthestLocation);
+                StringBuilder locations = new StringBuilder();
 
-		 if (shortestPath == null || shortestPath.size() <= 0){
-                         return "<p>No path exists between these two locations.</p>"; //checks for non existing paths
-                 }
+		for (String destination : furthestLocations){
+			List<String> shortestPath = backend.findLocationsOnShortestPath(start, b);
 
-                 StringBuilder locations = new StringBuilder();
+			if(shortestPath != null && !shortestPath.isEmpty()) {
+				locations.append("<p>Shortest path from ").append(start).append(" to ").append(destination).append(":</p>\n");
 
-                 for (String a : shortestPath) {
-                         locations.append("<li>").append(a).append("</li>\n");
-                 }
+				locations.append(</ol>\n)l;
 
-                 return "<p>Shortest path from " + start + " to " + furthestLocation + ":</p>\n" + "<ol>\n" + locations + "</ol>\n" + "<p>Number of Locations: " +
-			shortestPath.size();
+				for (String a : shortestPath) {
+                        	locations.append("<li>").append(a).append("</li>\n");
+                		}
+
+				locations.append("</ol>\n");
+
+				locations.append("<p>Number of Locations: ").append(shortestPath.size()).append("</p>\n");
+
+				locations.append("<hr/>\n");
+			}
+
+		}
+
+
+
+                return locations;
 
 
 

@@ -117,7 +117,7 @@ public Frontend(BackendInterface backend) {
 			if(shortestPath != null && !shortestPath.isEmpty()) {
 				locations.append("<p>Shortest path from ").append(start).append(" to ").append(destination).append(":</p>\n");
 
-				locations.append(</ol>\n);
+				locations.append("</ol>\n");
 
 				for (String a : shortestPath) {
                         	locations.append("<li>").append(a).append("</li>\n");

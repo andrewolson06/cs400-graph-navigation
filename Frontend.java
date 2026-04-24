@@ -65,10 +65,15 @@ public Frontend(BackendInterface backend) {
 
 		List<Double> times = backend.findTimesOnShortestPath(start, end);
 		String timesString;
-		if(times == null || times.isEmpty()){
+
+		if(times == null){
 			timesString = "Unknown";
 		} else {
-			timesString = times.get(times.size()-1) + " minutes";
+			double totalTime = 0;
+			for (Double t : times) {
+				totalTime += t;
+			}
+			timesString = totalTime + " minutes";
 		}
 
 		return "<p>Shortest path from " + start + " to " + end + ":</p>\n" + "<ol>\n" + locations + "</ol>\n" +

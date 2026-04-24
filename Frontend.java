@@ -24,6 +24,7 @@ public Frontend(BackendInterface backend) {
       * @return an HTML string containing input controls the user can use to
       *         request a shortest path computation
       */
+     @Override
      public String generateShortestPathPromptHTML(){
 	return """
 		<label for="start">Start Location:</label>
@@ -50,6 +51,7 @@ public Frontend(BackendInterface backend) {
       * @param end is the end location that this shortest path should end at
       * @return an HTML string for the shortest path between these two locations
       */
+     @Override
      public String generateShortestPathResponseHTML(String start, String end){
 	List<String> shortestPath = backend.findLocationsOnShortestPath(start, end);
 
@@ -91,6 +93,7 @@ public Frontend(BackendInterface backend) {
       * @return an HTML string that contains input controls that the user can use
       *         to request a calculation of the furthest locations list
       */
+     @Override
      public String generateFurthestLocationListFromPromptHTML(){
 		return """
                 	<label for="from">Start Location:</label>
@@ -112,6 +115,7 @@ public Frontend(BackendInterface backend) {
       * @return an HTML string for the list of furthest locations
       *        along a shortest path starting from the specified location
       */
+     @Override
      public String generateFurthestLocationListFromResponseHTML(String start){
 	try{
 		List<String> furthestLocations = backend.getFurthestFromList(start);

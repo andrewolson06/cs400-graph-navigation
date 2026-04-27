@@ -1,11 +1,11 @@
 import java.util.List;
 
 
+
+
 public class Frontend implements FrontendInterface{
 
-
 private BackendInterface backend;
-
 
 public Frontend(BackendInterface backend) {
         this.backend = backend;
@@ -24,6 +24,7 @@ public Frontend(BackendInterface backend) {
       * @return an HTML string containing input controls the user can use to
       *         request a shortest path computation
       */
+     @Override
      public String generateShortestPathPromptHTML(){
 	return """
 		<label for="start">Start Location:</label>
@@ -50,6 +51,7 @@ public Frontend(BackendInterface backend) {
       * @param end is the end location that this shortest path should end at
       * @return an HTML string for the shortest path between these two locations
       */
+     @Override
      public String generateShortestPathResponseHTML(String start, String end){
 	List<String> shortestPath = backend.findLocationsOnShortestPath(start, end);
 
@@ -64,12 +66,20 @@ public Frontend(BackendInterface backend) {
 		}
 
 		List<Double> times = backend.findTimesOnShortestPath(start, end);
+		String timesString;
 
-		return "<p>Shortest path from " + start + " to " + end + ":</p>\n" +
-			"<ol>\n" +
-			locations +
-			"</ol>\n" +
-			"<p>Total time: " +  times.get(times.size()-1) + " minutes</p>";
+		if(times == null){
+			timesString = "Unknown";
+		} else {
+			double totalTime = 0;
+			for (Double t : times) {
+				totalTime += t;
+			}
+			timesString = totalTime + " minutes";
+		}
+
+		return "<p>Shortest path from " + start + " to " + end + ":</p>\n" + "<ol>\n" + locations + "</ol>\n" +
+			"<p>Total time: " + timesString + "</p>";
 
 	}
 
@@ -83,6 +93,7 @@ public Frontend(BackendInterface backend) {
       * @return an HTML string that contains input controls that the user can use
       *         to request a calculation of the furthest locations list
       */
+     @Override
      public String generateFurthestLocationListFromPromptHTML(){
 		return """
                 	<label for="from">Start Location:</label>
@@ -104,34 +115,48 @@ public Frontend(BackendInterface backend) {
       * @return an HTML string for the list of furthest locations
       *        along a shortest path starting from the specified location
       */
+     @Override
      public String generateFurthestLocationListFromResponseHTML(String start){
 	try{
 		List<String> furthestLocations = backend.getFurthestFromList(start);
-		
-		String furthestLocation = furthestLocations.get(furthestLocations.size()-1);
 
-		List<String> shortestPath = backend.findLocationsOnShortestPath(start, furthestLocation);
+		if (furthestLocations == null || furthestLocations.isEmpty()){
+                         return "<p>No locations found</p>"; //checks if paths exist
+                }
 
-		 if (shortestPath == null || shortestPath.size() <= 0){
-                         return "<p>No path exists between these two locations.</p>";
-                 }
+                StringBuilder locations = new StringBuilder();
 
-                 StringBuilder locations = new StringBuilder();
-                 for (String a : shortestPath) {
-                         locations.append("<li>").append(a).append("</li>\n");
-                 }
+		for (String destination : furthestLocations){
+			List<String> shortestPath = backend.findLocationsOnShortestPath(start, destination);
 
-                 return "<p>Shortest path from " + start + " to " + furthestLocation + ":</p>\n" +
-                         "<ol>\n" +
-                         locations +
-                         "</ol>\n" +
-                         "<p>Number of Locations: " +  shortestPath.size();
+			if(shortestPath != null && !shortestPath.isEmpty()) {
+				locations.append("<p>Shortest path from ").append(start).append(" to ").append(destination).append(":</p>\n");
 
+				locations.append("<ol>\n");
 
+				for (String a : shortestPath) {
+                        	locations.append("<li>").append(a).append("</li>\n");
+                		}
 
-		}catch (Exception e){
-			return "<p>" + e.getMessage() + "</p>";
+				locations.append("</ol>\n");
+
+				locations.append("<p>Number of Locations: ").append(shortestPath.size()).append("</p>\n");
+
+				locations.append("<hr/>\n");
+			}
+
 		}
 
-	}
+
+
+                return locations.toString();
+
+
+
+	  }
+	  catch (Exception e){
+			return "<p>" + e.getMessage() + "</p>"; //catches other errors such as "invalid input", the exceptions should percolate from the backend methods.
+	  }
+
+      }
 }

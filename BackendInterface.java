@@ -59,4 +59,5 @@ public interface BackendInterface {
      *         no other locations that can be reached from there
      */
     public List<String> getFurthestFromList(String start) throws NoSuchElementException;
+
 }

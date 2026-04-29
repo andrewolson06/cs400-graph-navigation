@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Title:            P209.RoleCode
+// Title:            P213.Integration
 // Files:            BackendTests.java
 // Semester:         CS 400, Spring 2026
 //
@@ -86,12 +86,100 @@ public class BackendTests {
 	    //Success!!
 	}
 
-
-
-
     }
 
+    /**
+     * This test method tests the generateShortestPathPromptHTML method within the frontend class.
+     * The test tests whether the web server contains the correct output which asks for start and
+     * end locations along with the button to find the shortest path.
+     */
+    @Test
+    public void testShortestPathPromptIntegration() {
+	//create objects
+	DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+	Backend backend = new Backend(graph);
+	Frontend frontend = new Frontend(backend);
 
+	//call method
+	String html = frontend.generateShortestPathPromptHTML();
 
+	//test html output
+	Assertions.assertTrue(html.contains("start"));
+	Assertions.assertTrue(html.contains("end"));
+	Assertions.assertTrue(html.contains("Find Shortest Path"));
+    }
+
+    /**
+     * This test method tests tje generateShortestPathResponseHTML method within the frontend class.
+     * A new graph is made and the test makes sure that the shortest path is found and correctly
+     * outputted to the user.
+     */
+    @Test
+    public void testShortestPathResponseIntegration() {
+	//create objects
+	DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+	Backend backend = new Backend(graph);
+        Frontend frontend = new Frontend(backend);
+
+	//create a new graph
+	graph.insertNode("A");
+	graph.insertNode("B");
+	graph.insertNode("C");
+	graph.insertEdge("A", "B", 5.0);
+	graph.insertEdge("B", "C", 3.0);
+	graph.insertEdge("A", "C", 15.0);
+
+	//call method
+	String html = frontend.generateShortestPathResponseHTML("A", "C");
+
+	//test the html output with the correct nodes
+	Assertions.assertTrue(html.contains("A"));
+	Assertions.assertTrue(html.contains("C"));
+	Assertions.assertTrue(html.contains("Total time"));
+	Assertions.assertTrue(html.contains("<ol>"));
+    }
+
+    /**
+     * This test method tests what is outputted if an invalid path is added inputted by the user.
+     * The test makes sure the appropiate message is displayed to correctly notify the user of their
+     * mistake.
+     */
+    @Test
+    public void testNoPathExistsIntegration() {
+	//create objects
+	DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+        Backend backend = new Backend(graph);
+        Frontend frontend = new Frontend(backend);
+
+	//insert nodes
+	graph.insertNode("A");
+	graph.insertNode("B");
+	graph.insertNode("C");
+	graph.insertEdge("A", "B", 1.0);
+
+	//ask method to find path between two nodes that does not exist
+	String html = frontend.generateShortestPathResponseHTML("A", "C");
+
+	//check if the correct message is displayed
+	Assertions.assertTrue(html.contains("No path exists between these two locations."));
+    }
+
+    /**
+     * This test method tests what is outputted if an invalid start location is given by the user.
+     * The test makes sure the appropiate error message is outputted to alert the user of their mistake.
+     */
+    @Test
+    public void testInvalidStartIntegration() {
+	//create objects
+	DijkstraGraph<String, Double> graph = new DijkstraGraph<>();
+        Backend backend = new Backend(graph);
+        Frontend frontend = new Frontend(backend);
+
+	//call method with invalid start location
+	String html = frontend.generateFurthestLocationListFromResponseHTML("INVALID");
+
+	//check if the correct message is outputted
+	Assertions.assertTrue(html.contains("Start node not found"));
+    }
 
 }

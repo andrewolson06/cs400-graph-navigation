@@ -2,6 +2,8 @@
 
 A Java-based graph navigation application developed as part of a larger software engineering project. The application uses graph data structures and shortest-path algorithms to determine routes and travel times between locations in a European rail network.
 
+Here is a video demonstration and walk-through of how the application works: https://mediaspace.wisc.edu/media/1_exteeenv
+
 ## Overview
 
 This project integrates several software components into a complete graph-based navigation application. The backend processes graph data, performs shortest-path calculations, and provides route and travel-time information to the frontend.
